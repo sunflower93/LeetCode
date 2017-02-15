@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="LeetCode:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/LeetCode_jar</output-path>
+    <root id="archive" name="LeetCode.jar">
+      <element id="module-output" name="LeetCode" />
+    </root>
+  </artifact>
+</component>
