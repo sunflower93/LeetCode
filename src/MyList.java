@@ -1,23 +1,23 @@
 /**
  * Created by ShaoBin on 2016/3/9.
  */
-public class List {
+public class MyList {
     public static void main(String[] args) {
         Solution solution = new Solution();
 //        int[] array = {12, 76, 35, 22, 16, 48, 90, 46, 9, 40};
 //        int[] array1 = {12, 76, 3, 22, 16, 48, 90, 46, 9, 40};
 //        int[] array11 = {1, 1, 2, 3, 3, 4, 5, 5, 5, 5};
-//        ListNode list = new ListNode(array[0]);   //´´½¨¶þ²æÊ÷
+//        ListNode list = new ListNode(array[0]);   //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 //        ListNode list1 = new ListNode(array1[0]);
 //        ListNode list11 = new ListNode(array11[0]);
 //        for (int i = 1; i < array.length; i++) {
-//            list.insert(list, array[i]);       //Ïò¶þ²æÊ÷ÖÐ²åÈëÊý¾Ý
+//            list.insert(list, array[i]);       //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 //        }
 //        for (int i = 1; i < array1.length; i++) {
-//            list1.insert(list1, array1[i]);       //Ïò¶þ²æÊ÷ÖÐ²åÈëÊý¾Ý
+//            list1.insert(list1, array1[i]);       //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 //        }
 //        for (int i = 1; i < array11.length; i++) {
-//            list11.insert(list11, array11[i]);       //Ïò¶þ²æÊ÷ÖÐ²åÈëÊý¾Ý
+//            list11.insert(list11, array11[i]);       //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 //        }
 //        ListNode l = list;
 //        ListNode ll = list1;
@@ -54,10 +54,10 @@ public class List {
         ListNode sortlist1 = new ListNode(arrays1[0]);
         ListNode sortlist2 = new ListNode(arrays2[0]);
         for (int i = 1; i < arrays1.length; i++) {
-            sortlist1.insert(sortlist1, arrays1[i]);       //Ïò¶þ²æÊ÷ÖÐ²åÈëÊý¾Ý
+            sortlist1.insert(sortlist1, arrays1[i]);       //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         }
         for (int i = 1; i < arrays2.length; i++) {
-            sortlist2.insert(sortlist2, arrays2[i]);       //Ïò¶þ²æÊ÷ÖÐ²åÈëÊý¾Ý
+            sortlist2.insert(sortlist2, arrays2[i]);       //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         }
         ListNode l1 = sortlist1;
         ListNode l2 = sortlist2;

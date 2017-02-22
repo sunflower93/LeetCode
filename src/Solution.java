@@ -1,8 +1,4 @@
-import java.lang.reflect.Array;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Scanner;
-import java.util.Stack;
+import java.util.*;
 
 
 public class Solution {
@@ -347,14 +343,443 @@ public class Solution {
         return ans;
     }
 
+    public int hammingDistance(int x, int y) {       //461
+        int dist = 0;
+        int val = x ^ y;
+        while (val != 0) {
+            dist++;
+            val &= val - 1;
+        }
+        return dist;
+    }
+
+    public String[] findWords(String[] words) {     //500
+        int[] a = {2,3,3,2,1,2,2,2,1,2,2,2,3,3,1,1,1,1,2,1,1,3,1,3,1,3};
+        String[] mid = new String[words.length];
+        int all = 0;
+        for (int i = 0; i < words.length; i++) {
+            String temp = words[i].toLowerCase();
+            int sum = 0;
+            for (int j = 0; j < temp.length(); j++) {
+                sum += a[temp.charAt(j) - 97];
+            }
+            if (a[temp.charAt(0) - 97] == 1 && sum == temp.length()) {
+                mid[all++] = words[i];
+            }
+            else if (a[temp.charAt(0) - 97] == 2 && temp.length() * 2 == sum) {
+                mid[all++] = words[i];
+            }
+            else if (temp.length() * 3 == sum) {
+                mid[all++] = words[i];
+            }
+        }
+        String[] answers = new String[all];
+        for (int i = 0; i < all; i++) {
+            answers[i] = mid[i];
+        }
+        return answers;
+    }
+
+    public int findComplement(int num) {      //476
+        int temp = num;
+        int mask = 1;
+        while(temp != 0){
+            temp >>= 1;
+            mask <<= 1;
+        }
+        return ((mask - 1) ^ num);
+//        return ~num & ((Integer.highestOneBit(num) << 1) - 1);
+    }
+
+    public int[] nextGreaterElement(int[] findNums, int[] nums) {       //496
+        int[] temp = new int[nums.length];
+        int[] answer = new int[findNums.length];
+        for (int i = 0; i < nums.length; i++) {
+            int j = i + 1;
+            for (j = i + 1; j < nums.length; j++) {
+                if (nums[i] < nums[j]) {
+                    temp[i] = nums[j];
+                    i++;
+                    j = i;
+                }
+            }
+            if (j == nums.length) {
+                temp[i] = -1;
+            }
+        }
+        for (int i = 0; i < findNums.length; i++) {
+            for (int j = 0; j < nums.length; j++) {
+                if (findNums[i] == nums[j]) {
+                    answer[i] = temp[j];
+                    i++;
+                    if (i == findNums.length)break;
+                    j = -1;
+                }
+            }
+        }
+        return answer;
+    }
+
+    public List<String> fizzBuzz(int n) {
+        List<String> answer = new LinkedList<String >();
+        for (int i = 1; i <= n; i++) {
+            if (i % 3 == 0 && i % 5 == 0) {
+                answer.add("FizzBuzz");
+            }
+            else if (i % 3 == 0) {
+                answer.add("Fizz");
+            }
+            else if (i % 5 == 0) {
+                answer.add("Buzz");
+            }
+            else {
+                answer.add(String.valueOf(i));
+            }
+        }
+        return answer;
+    }
+
+    public int findMaxConsecutiveOnes(int[] nums) {       //485
+        Stack<Integer> stack = new Stack<Integer>();
+        stack.push(-1);
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] == 0) {
+                stack.push(i);
+            }
+        }
+        int large = nums.length;
+        int ans = 0;
+        while (!stack.empty()) {
+            int temp = stack.pop();
+            if (ans < (large - temp - 1)) {
+                ans = large - temp - 1;
+                large = temp;
+            }
+            else {
+                large = temp;
+            }
+        }
+        return ans;
+    }
+
+    public List<Integer> findDisappearedNumbers(int[] nums) {       //448
+        List<Integer> answer = new LinkedList<Integer>();
+        for (int i = 1; i <= nums.length; i++) {
+            answer.add(i);
+        }
+        for (int i = 0; i < nums.length; i++) {
+            if (answer.contains(nums[i])) {
+                answer.remove(Integer.valueOf(nums[i]));
+            }
+        }
+        return answer;
+    }
+
+//    public int findContentChildren(int[] g, int[] s) {        //455
+//        for (int i = 0; i < g.length; i++) {
+//            for (int j = 0; j < g.length - 1; j++) {
+//                if (g[j] < g[j + 1]) {
+//                    int t = g[j];
+//                    g[j] = g[j + 1];
+//                    g[j + 1] = t;
+//                }
+//            }
+//        }
+//        for (int i = 0; i < s.length; i++) {
+//            for (int j = 0; j < s.length - 1; j++) {
+//                if (s[j] < s[j + 1]) {
+//                    int t = s[j];
+//                    s[j] = s[j + 1];
+//                    s[j + 1] = t;
+//                }
+//            }
+//        }
+//        int i = 0,j = 0;
+//        int ans = 0;
+//        while (i < g.length && j < s.length) {
+//            if (g[i] <= s[j]) {
+//                ans++;
+//                i++;
+//                j++;
+//            }
+//            else if (g[i] > s[j]) {
+//                i++;
+//            }
+//        }
+//        return ans;
+//    }
+
+    public int findContentChildren(int[] g, int[] s) {        //455
+        Sort sort = new Sort();
+        sort.quickSort(g);
+        sort.quickSort(s);
+        int i = g.length - 1,j = s.length - 1;
+        int ans = 0;
+        while (i >= 0 && j >= 0) {
+            if (g[i] <= s[j]) {
+                System.out.println("i:" + i +",j:" + j + ",gi:" + g[i] + ",sj:" + s[j]);
+                ans++;
+                i--;
+                j--;
+            }
+            else if (g[i] > s[j]) {
+                i--;
+            }
+        }
+        return ans;
+    }
+
+    public String convertToBase7(int num) {      //504
+        String ans = new String();
+        int i = 0;
+        int temp = num;
+        if (num < 0) {
+            temp = 0 - num;
+        }
+        while (temp != 0) {
+            ans = (temp % 7) + ans;
+            temp /= 7;
+        }
+        if (num < 0) {
+            ans = "-" + ans;
+        }
+        return ans;
+    }
+
+    public int[] intersection(int[] nums1, int[] nums2) {        //349
+//        Sort sort = new Sort();
+//        sort.quickSort(nums1);
+//        sort.quickSort(nums2);
+//        int[] temp = new int[nums1.length > nums2.length ? nums2.length : nums1.length];
+//        if (nums1.length == 0 || nums2.length == 0) return temp;
+//        int i = 0, j = 0;
+//        int count = 0;
+//        while (i != nums1.length || j != nums2.length) {
+//            if (i == nums1.length - 1 && j == nums2.length - 1) {
+//                if (nums1[i] == nums2[j]) {
+//                    if (count == 0) {
+//                        temp[count++] = nums1[i];
+//                    }
+//                    else if(temp[count - 1] != nums1[i]) {
+//                        temp[count++] = nums1[i];
+//                    }
+//                }
+//                i++;
+//                j++;
+//            }
+//            else if (nums1[i] == nums2[j]) {
+//                if (count == 0) {
+//                    temp[count++] = nums1[i];
+//                }
+//                else if(temp[count - 1] != nums1[i]) {
+//                    temp[count++] = nums1[i];
+//                }
+//                if (i != nums1.length - 1 && j != nums2.length - 1) {
+//                    i++;
+//                    j++;
+//                }
+//                else break;
+//            }
+//            else if (nums1[i] > nums2[j]) {
+//                if (j != nums2.length - 1) {
+//                    j++;
+//                }
+//                else break;
+//            }
+//            else if (nums1[i] < nums2[j]) {
+//                if (i != nums1.length - 1) {
+//                    i++;
+//                }
+//                else break;
+//            }
+//        }
+//        int[] ans = new int[count];
+//        for (int k = 0; k < count; k++) {
+//            ans[k] = temp[k];
+//        }
+//        return ans;
+        if (nums1.length == 0 || nums2.length == 0) return new int[0];
+        Set<Integer> a = new TreeSet<Integer>();
+        Set<Integer> b = new TreeSet<Integer>();
+        for (int i = 0; i < nums1.length; i++) {
+            a.add(nums1[i]);
+        }
+        for (int i = 0; i < nums2.length; i++) {
+            b.add(nums2[i]);
+        }
+        Set<Integer> c = new TreeSet<Integer>();
+        Iterator<Integer> aiter = a.iterator();
+        Iterator<Integer> biter = b.iterator();
+        Integer ta = aiter.next();
+        Integer tb = biter.next();
+        while (true) {
+            if (ta.equals(tb)) {
+                c.add(ta);
+                if (aiter.hasNext() && biter.hasNext()) {
+                    ta = aiter.next();
+                    tb = biter.next();
+                }
+                else break;
+            }
+            else if (ta.compareTo(tb) > 0 && biter.hasNext()) {
+                tb = biter.next();
+            }
+            else if (ta.compareTo(tb) < 0 && aiter.hasNext()) {
+                ta = aiter.next();
+            }
+            else {
+                break;
+            }
+        }
+        int[] ans = new int[c.size()];
+        int i = 0;
+        Iterator<Integer> citer = c.iterator();
+        while (citer.hasNext()) {
+            ans[i++] = citer.next();
+        }
+        return ans;
+    }
+
+    public boolean canConstruct(String ransomNote, String magazine) {       //383
+        int[] temp = new int[26];
+        for (int i = 0; i < magazine.length(); i++) {
+            temp[magazine.charAt(i) - 97]++;
+        }
+        for (int i = 0; i < ransomNote.length(); i++) {
+            temp[ransomNote.charAt(i) - 97]--;
+            if (temp[ransomNote.charAt(i) - 97] < 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean detectCapitalUse(String word) {      //520
+        int count = 0;
+        for (int i = 0; i < word.length(); i++) {
+            if (word.charAt(i) >= 65 && word.charAt(i) <= 90) {
+                count++;
+            }
+        }
+        if (count == word.length() || (count == 1 && word.charAt(0) <= 90) || count ==0) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    public int[] twoSum(int[] numbers, int target) {      //167
+        int start = 0;
+        int end = numbers.length - 1;
+        int[] ans = new int[2];
+        while (numbers[start] + numbers[end] != target) {
+            if (start == end) {
+                return ans;
+            }
+            else if (numbers[start] + numbers[end] > target) {
+                end--;
+                start = 0;
+            }
+            else {
+                start++;
+            }
+        }
+        ans[0] = start + 1;
+        ans[1] = end + 1;
+        return ans;
+    }
+
+    public int maxProfit(int[] prices) {
+        //121
+//        int ans = 0;
+//        if (prices.length < 2) {
+//            return ans;
+//        }
+//        int min = prices[0];
+//        for (int i = 1; i < prices.length; i++) {
+//            min = Math.min(prices[i], min);
+//            ans = Math.max(ans, (prices[i] - min));
+//        }
+//        return ans;
+        //122
+//        int sum = 0;
+//        for (int i = 1; i < prices.length; ++i) {
+//            if (prices[i] > prices[i - 1]) {
+//                sum += prices[i] - prices[i - 1];
+//            }
+//        }
+//        return sum;
+        //123
+        int ret1 = 0, ret2 = 0;
+        if (prices.length < 2) {
+            return 0;
+        }
+        int min = prices[0];
+        for (int i = 1; i < prices.length; i++) {
+            min = Math.min(prices[i], min);
+            if (prices[i] - min > ret2) {
+                int temp = ret1;
+                ret1 = prices[i] - min;
+                if (temp > ret2) {
+                    ret2 = temp;
+                }
+                min = prices[i];
+            }
+            System.out.println("ret1:" + ret1 + "ret2:" + ret2 + "min:" + min);
+        }
+        return ret1 + ret2;
+    }
+
+    public void deleteNode(ListNode node) {       //237
+        if (node == null || node.next == null) {
+            return;
+        }
+        node.val = node.next.val;
+        node.next = node.next.next;
+    }
+
+    public int firstUniqChar(String s) {          //387
+        int[] v = new int[26];
+        for (int i = 0; i < s.length(); i++) {
+            v[s.charAt(i) - 97]++;
+        }
+        for (int i = 0; i < s.length(); i++) {
+            if (v[s.charAt(i) - 97] == 1) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
     public static void main(String []args){
         while (true) {
             System.out.println("Plesae input:");
             Scanner in = new Scanner(System.in);
             Solution solution = new Solution();
-            String a = in.nextLine();
-            String b = in.nextLine();
-            System.out.println(solution.addStrings(a,b));
+//            String a = in.nextLine();
+//            String b = in.nextLine();
+//            System.out.println(solution.addStrings(a,b));
+//            String[] words = {"abdfs","cccd","a","qwwewm", "qz","wq","asdddafadsfa","adfadfadfdassfawde"};
+//            int[] a = {4,1,2};
+//            int[] b = {1,3,4,2};
+//            int[] aa = {2,4};
+//            int[] bb = {1,2,3,4};
+//            int[] d = {1,5,2,6,2,8,4,6};
+//            List<Integer> ans = solution.findDisappearedNumbers(d);
+//            for (Integer x:ans
+//                 ) {
+//                System.out.println(x + "     ");
+//            }
+            int[] a = {6,1,3,2,4,7};
+            int[] b = {1,1};
+////            System.out.println(solution.intersection(a,b));
+//            int[] ans = solution.intersection(a,b);
+//            for (Integer x:ans) {
+//                System.out.println(x + "     ");
+//            }
+            System.out.println(solution.maxProfit(a));
+            int aaa = in.nextInt();
         }
 
     }
