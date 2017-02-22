@@ -752,6 +752,188 @@ public class Solution {
         return -1;
     }
 
+    public int minMoves(int[] nums) {
+        int sum = 0;
+        int min = nums[0];
+        if (nums.length < 2) {
+            return  0;
+        }
+        else {
+            for (int i = 0; i < nums.length; i++) {
+                sum += nums[i];
+                if (min > nums[i]) {
+                    min = nums[i];
+                }
+            }
+            return sum - min * nums.length;
+        }
+    }
+
+//    public int[] plusOne(int[] digits) {
+//        int t = 1;
+//        int[] ans;
+//        for (int i = digits.length - 1; i >= 0 ; i--) {
+//            digits[i] += t;
+//            if (digits[i] >= 10) {
+//                t = 1;
+//                digits[i] -= 10;
+//            }
+//            else {
+//                t = 0;
+//            }
+//        }
+//        if (t != 0) {
+//            ans = new int[digits.length + 1];
+//            ans[0] = 1;
+//            for (int i = 1; i < ans.length; i++) {
+//                ans[i] = digits[i - 1];
+//            }
+//            return ans;
+//        }
+//        else return digits;
+//    }
+
+    public int sumOfLeftLeaves(TreeNode root) {
+        int ans = 0;
+        if (root == null) return ans;
+        if ((root.left == null && root.right == null)) return ans;
+        Stack<TreeNode> stack = new Stack<TreeNode>();
+        TreeNode parents = root;
+        TreeNode node = root;
+        while (node != null || !stack.empty()) {
+            if (node.right != null) {
+                stack.push(node.right);
+            }
+            else if (node.left == null && node.right == null) {
+                if (parents.left != null && parents.left.equals(node)) {
+                    System.out.println("now:" + node.val);
+                    ans += node.val;
+                }
+            }
+            if (node.left == null && !stack.empty()) {
+                parents = node;
+                node = (TreeNode) stack.pop();
+            }
+            else {
+                parents = node;
+                node = node.left;
+            }
+        }
+        return ans;
+    }
+
+//    public List<Integer> findDisappearedNumbers(int[] nums) {
+//        List<Integer> anslist = new LinkedList<Integer>();
+//        for (int i = 0; i < nums.length; ) {
+//            if (nums[i] == 0) {
+//                i++;
+//                continue;
+//            }
+//            if (nums[i] != i + 1 && nums[i] != nums[nums[i] - 1]) {
+//                int t = nums[i];
+//                nums[i] = nums[t - 1];
+//                nums[t - 1] = t;
+//            }
+//            else if (nums[i] != i + 1 && nums[i] == nums[nums[i] - 1]) {
+//                nums[i] = 0;
+//            }
+//            else {
+//                i++;
+//            }
+//        }
+//        for (int i = 0; i < nums.length; i++) {
+//            if (nums[i] == 0) {
+//                anslist.add(i + 1);
+//            }
+//        }
+//        return anslist;
+//    }
+
+    public int singleNumber(int[] nums) {
+        int ans = 0;
+        for (int i = 0; i < nums.length; i++) {      //136
+            ans = ans ^ nums[i];
+        }
+        return ans;
+    }
+
+    public int getSum(int a, int b) {       //371
+        if (a >= 0) {
+            for (int i = 0; i < a; i++) {
+                b++;
+            }
+        }
+        else {
+            for (int i = 0; i > a; i--) {
+                b--;
+            }
+        }
+        return b;
+    }
+
+    public char findTheDifference(String s, String t) {       //389
+        char ans = 0;
+        int[] a = new int[26];
+        for (int i = 0; i < t.length(); i++) {
+            a[t.charAt(i) - 97]++;
+        }
+        for (int i = 0; i < s.length(); i++) {
+            a[s.charAt(i) - 97]--;
+        }
+        for (int i = 0; i < a.length; i++) {
+            if (a[i] == 1) {
+                ans = (char)(i + 97);
+            }
+        }
+        return ans;
+    }
+
+    public int[] constructRectangle(int area) {         //492
+        int[] ans = new int[2];
+        ans[0] = (int)Math.sqrt(area);
+        ans[1] = ans[0];
+        while (area % ans[1] != 0) {
+            ans[1]--;
+        }
+        ans[0] = area / ans[1];
+        return ans;
+    }
+
+    public String[] findRelativeRanks(int[] nums) {        //506
+        String[] ans = new String[nums.length];
+        int[] temp = new int[nums.length];
+        for (int i = 0; i < temp.length; i++) {
+            temp[i] = i;
+        }
+        for (int i = 0; i < nums.length; i++) {
+            for (int j = 0; j < nums.length - 1; j++) {
+                if (nums[j] < nums[j + 1]) {
+                    int t = nums[j];
+                    nums[j] = nums[j + 1];
+                    nums[j + 1] = t;
+                    t = temp[j];
+                    temp[j] = temp[j + 1];
+                    temp[j + 1] = t;
+                }
+            }
+        }
+        for (int i = 0; i < temp.length; i++) {
+            if (i == 0) {
+                ans[temp[i]] = "Gold Medal";
+            }
+            else if (i == 1) {
+                ans[temp[i]] = "Silver Medal";
+            }
+            else if (i == 2) {
+                ans[temp[i]] = "Bronze Medal";
+            }
+            else {
+                ans[temp[i]] = String.valueOf(i + 1);
+            }
+        }
+        return ans;
+    }
+
     public static void main(String []args){
         while (true) {
             System.out.println("Plesae input:");
