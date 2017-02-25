@@ -123,7 +123,6 @@ public class Solution {
         return 0;
     }
 
-
     public ListNode reverseList(ListNode head) {           //Á´±í·´×ª
         if (head == null || head.next == null) return head;
         ListNode pre = head;
@@ -711,24 +710,53 @@ public class Solution {
 //        }
 //        return sum;
         //123
-        int ret1 = 0, ret2 = 0;
         if (prices.length < 2) {
             return 0;
         }
+        int[] ans_right = new int[prices.length];
+        int[] ans_left = new int[prices.length];
         int min = prices[0];
+        ans_left[0] = 0;
         for (int i = 1; i < prices.length; i++) {
-            min = Math.min(prices[i], min);
-            if (prices[i] - min > ret2) {
-                int temp = ret1;
-                ret1 = prices[i] - min;
-                if (temp > ret2) {
-                    ret2 = temp;
-                }
-                min = prices[i];
-            }
-            System.out.println("ret1:" + ret1 + "ret2:" + ret2 + "min:" + min);
+            min = Math.min(min, prices[i]);
+            ans_left[i] = Math.max(ans_left[i - 1], prices[i] - min);
         }
-        return ret1 + ret2;
+        int max = prices[prices.length - 1];
+        ans_right[prices.length - 1] = 0;
+        for (int i = prices.length - 2; i >= 0; i--) {
+            max = Math.max(max, prices[i]);
+            ans_right[i] = Math.max(ans_right[i + 1], max - prices[i]);
+        }
+        int ans = 0;
+        for (int i = 0; i < prices.length; i++) {
+            ans = (ans < (ans_left[i] + ans_right[i])) ? (ans_left[i] + ans_right[i]) : ans;
+        }
+        return ans;
+        //124
+
+    }
+
+    public int longestPalindrome(String s) {
+        int ans = 0;
+        int[] v = new int[52];
+        for (int i = 0; i < s.length(); i++) {
+            if (s.charAt(i) >= 97) {
+                v[s.charAt(i) - 97]++;
+            }
+            else {
+                v[s.charAt(i) - 39]++;
+            }
+        }
+        int flag = 0;
+        for (int x:v) {
+            if (x % 2 == 0) {
+                ans += x;
+            }
+            else {
+                flag = 1;
+            }
+        }
+        return ans + flag;
     }
 
     public void deleteNode(ListNode node) {       //237
@@ -933,6 +961,7 @@ public class Solution {
         }
         return ans;
     }
+
 
     public static void main(String []args){
         while (true) {
