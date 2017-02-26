@@ -545,7 +545,7 @@ public class Solution {
         return ans;
     }
 
-    public int[] intersection(int[] nums1, int[] nums2) {        //349
+    public int[] intersection(int[] nums1, int[] nums2) {        //349-350
 //        Sort sort = new Sort();
 //        sort.quickSort(nums1);
 //        sort.quickSort(nums2);
@@ -597,23 +597,79 @@ public class Solution {
 //            ans[k] = temp[k];
 //        }
 //        return ans;
+
+        //349
+//        if (nums1.length == 0 || nums2.length == 0) return new int[0];
+//        Set<Integer> a = new TreeSet<Integer>();
+//        Set<Integer> b = new TreeSet<Integer>();
+//        for (int i = 0; i < nums1.length; i++) {
+//            a.add(nums1[i]);
+//        }
+//        for (int i = 0; i < nums2.length; i++) {
+//            b.add(nums2[i]);
+//        }
+//        Set<Integer> c = new TreeSet<Integer>();
+//        Iterator<Integer> aiter = a.iterator();
+//        Iterator<Integer> biter = b.iterator();
+//        Integer ta = aiter.next();
+//        Integer tb = biter.next();
+//        while (true) {
+//            if (ta.equals(tb)) {
+//                c.add(ta);
+//                if (aiter.hasNext() && biter.hasNext()) {
+//                    ta = aiter.next();
+//                    tb = biter.next();
+//                }
+//                else break;
+//            }
+//            else if (ta.compareTo(tb) > 0 && biter.hasNext()) {
+//                tb = biter.next();
+//            }
+//            else if (ta.compareTo(tb) < 0 && aiter.hasNext()) {
+//                ta = aiter.next();
+//            }
+//            else {
+//                break;
+//            }
+//        }
+//        int[] ans = new int[c.size()];
+//        int i = 0;
+//        Iterator<Integer> citer = c.iterator();
+//        while (citer.hasNext()) {
+//            ans[i++] = citer.next();
+//        }
+//        return ans;
+
+        //350
         if (nums1.length == 0 || nums2.length == 0) return new int[0];
-        Set<Integer> a = new TreeSet<Integer>();
-        Set<Integer> b = new TreeSet<Integer>();
+        TreeMap<Integer, Integer> a = new TreeMap<Integer, Integer>();
+        TreeMap<Integer, Integer> b = new TreeMap<Integer, Integer>();
         for (int i = 0; i < nums1.length; i++) {
-            a.add(nums1[i]);
+            if (!a.containsKey(nums1[i])) {
+                a.put(nums1[i], 1);
+            }
+            else {
+                a.replace(nums1[i], a.get(nums1[i]) + 1);
+            }
         }
         for (int i = 0; i < nums2.length; i++) {
-            b.add(nums2[i]);
+            if (!b.containsKey(nums2[i])) {
+                b.put(nums2[i], 1);
+            }
+            else {
+                b.replace(nums2[i], b.get(nums2[i]) + 1);
+            }
         }
-        Set<Integer> c = new TreeSet<Integer>();
-        Iterator<Integer> aiter = a.iterator();
-        Iterator<Integer> biter = b.iterator();
+        Iterator<Integer> aiter = a.keySet().iterator();
+        Iterator<Integer> biter = b.keySet().iterator();
         Integer ta = aiter.next();
         Integer tb = biter.next();
+
+        TreeMap<Integer, Integer> c = new TreeMap<Integer, Integer>();
         while (true) {
-            if (ta.equals(tb)) {
-                c.add(ta);
+            if (ta.compareTo(tb) == 0) {
+                int count = a.get(ta) > b.get(tb) ? b.get(tb) : a.get(ta);
+                c.put(ta, count);
                 if (aiter.hasNext() && biter.hasNext()) {
                     ta = aiter.next();
                     tb = biter.next();
@@ -626,15 +682,23 @@ public class Solution {
             else if (ta.compareTo(tb) < 0 && aiter.hasNext()) {
                 ta = aiter.next();
             }
-            else {
-                break;
-            }
+            else break;
         }
-        int[] ans = new int[c.size()];
-        int i = 0;
-        Iterator<Integer> citer = c.iterator();
+        Iterator<Integer> citer = c.keySet().iterator();
+        int anslength = 0;
         while (citer.hasNext()) {
-            ans[i++] = citer.next();
+            anslength += c.get(citer.next());
+        }
+        System.out.println(anslength);
+        int[] ans = new int[anslength];
+        citer = c.keySet().iterator();
+        int i = 0;
+        while (citer.hasNext()) {
+            int num = citer.next();
+            int sum = c.get(num);
+            while (sum-- != 0) {
+                ans[i++] = num;
+            }
         }
         return ans;
     }
@@ -689,7 +753,7 @@ public class Solution {
         return ans;
     }
 
-    public int maxProfit(int[] prices) {
+    public int maxProfit(int[] prices) {        //121-124
         //121
 //        int ans = 0;
 //        if (prices.length < 2) {
@@ -736,7 +800,7 @@ public class Solution {
 
     }
 
-    public int longestPalindrome(String s) {
+    public int longestPalindrome(String s) {         //409
         int ans = 0;
         int[] v = new int[52];
         for (int i = 0; i < s.length(); i++) {
@@ -982,14 +1046,13 @@ public class Solution {
 //                 ) {
 //                System.out.println(x + "     ");
 //            }
-            int[] a = {6,1,3,2,4,7};
-            int[] b = {1,1};
-////            System.out.println(solution.intersection(a,b));
-//            int[] ans = solution.intersection(a,b);
-//            for (Integer x:ans) {
-//                System.out.println(x + "     ");
-//            }
-            System.out.println(solution.maxProfit(a));
+            int[] a = {6,1,3,2,4,7,2};
+            int[] b = {1,2,2,1};
+            int[] ans = solution.intersection(a,b);
+            for (Integer x:ans) {
+                System.out.println(x + "     ");
+            }
+//            System.out.println(solution.maxProfit(a));
             int aaa = in.nextInt();
         }
 
