@@ -3,6 +3,9 @@ package leetcode;
 import java.util.*;
 
 class Solution2023 {
+    /*
+    58. 最后一个单词的长度
+     */
     public int lengthOfLastWord(String s) {
         String[] strs = s.trim().split(" ");
         return strs[strs.length - 1].length();
