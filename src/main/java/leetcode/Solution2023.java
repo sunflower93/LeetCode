@@ -1,8 +1,141 @@
 package leetcode;
 
+import javax.security.auth.login.CredentialNotFoundException;
 import java.util.*;
 
 class Solution2023 {
+    /*
+    1736. 替换隐藏数字得到的最晚时间
+     */
+    public String maximumTime(String time) {
+        StringBuilder sb = new StringBuilder();
+        if ((time.charAt(0) == '?' || time.charAt(0) == '2') && time.charAt(1) == '?') sb.append("23");
+        else if (time.charAt(0) == '?' && time.charAt(1) <= '3') sb.append('2').append(time.charAt(1));
+        else if (time.charAt(0) == '?') sb.append('1').append(time.charAt(1));
+        else if (time.charAt(1) == '?') sb.append(time.charAt(0)).append('9');
+        else sb.append(time.substring(0, 2));
+        sb.append(':');
+        if (time.charAt(3) == '?') sb.append('5');
+        else sb.append(time.charAt(3));
+        if (time.charAt(4) == '?') sb.append('9');
+        else sb.append(time.charAt(4));
+        return sb.toString();
+    }
+    /*
+    1748. 唯一元素的和
+     */
+    public int sumOfUnique(int[] nums) {
+        int ans = 0;
+        HashMap<Integer, Integer> map = new HashMap<>(nums.length);
+        for (int x : nums) {
+            if (map.containsKey(x)) {
+                int t = map.get(x) + 1;
+                map.remove(x);
+                map.put(x, t);
+            }
+            else map.put(x, 1);
+        }
+        for (Integer key : map.keySet()) {
+            if (map.get(key) == 1) {
+                ans += key;
+            }
+        }
+        return ans;
+    }
+    /*
+    1720. 解码异或后的数组
+     */
+    public int[] decode(int[] encoded, int first) {
+        int[] ans = new int[encoded.length + 1];
+        ans[0] = first;
+        for (int i = 0; i < ans.length - 1; i++) {
+            ans[i + 1] = ans[i] ^ encoded[i];
+        }
+        return ans;
+    }
+    /*
+    面试题 16.10. 生存人数
+    差分数组
+     */
+    public int maxAliveYear(int[] birth, int[] death) {
+        int start = 1900, end = 2000;
+        int[] num = new int[end - start + 2];
+        for (int i = 0; i < birth.length; i++) {
+            num[birth[i] - 1900]++;
+            num[death[i] - 1900 + 1]--;
+        }
+        int max = 0, sum = 0, res = 0;
+        for (int i = 0; i < end - start + 1; i++) {
+            sum += num[i];
+            if (sum > max) {
+                max = sum;
+                res = i;
+            }
+        }
+        return start + res;
+    }
+    /*
+    2583. 二叉树中的第 K 大层和
+     */
+    public long kthLargestLevelSum(TreeNode root, int k) {
+        if (root == null) return -1;
+        int oldNodeCount, newNodeCount, levelCount, tempCount;
+        long tempSum = 0l;
+        oldNodeCount = 1;
+        newNodeCount = levelCount = tempCount = 0;
+        ArrayDeque<TreeNode> queue = new ArrayDeque<>();
+//        long[] ansTree = new long[k];
+        PriorityQueue<Long> ansTree = new PriorityQueue<>();
+        queue.add(root);
+        while (!queue.isEmpty()) {
+            TreeNode tempNode = queue.pop();
+            tempCount++;
+            if (tempNode.left != null) {
+                queue.add(tempNode.left);
+                newNodeCount++;
+            }
+            if (tempNode.right != null) {
+                queue.add(tempNode.right);
+                newNodeCount++;
+            }
+            tempSum += tempNode.val;
+            if (tempCount == oldNodeCount) {
+                oldNodeCount = newNodeCount;
+                newNodeCount = 0;
+                tempCount = 0;
+                levelCount++;
+//                insertHelper(ansTree, k, levelCount, tempSum);
+                insertHelper(ansTree, k, levelCount, tempSum);
+                tempSum = 0;
+            }
+        }
+        if (levelCount < k) return -1;
+//        return ansTree[k - 1];
+        return ansTree.peek();
+    }
+    private void insertHelperSlow(long[] tree, int len, int level, long x) {
+        //垃圾版本，遍历
+        if (level >= len || (level < len && x > tree[len - 1]) || level == 1) {
+            for (int i = 0; i <= len - 1; i++) {
+                if (x > tree[i]) {
+                    long t = tree[i];
+                    tree[i] = x;
+                    x = t;
+                }
+            }
+        }
+    }
+    private void insertHelper(PriorityQueue<Long> tree, int len, int level, long x) {
+        System.out.println(tree.peek());
+        //使用堆
+        if (level <= len) {
+            tree.add(x);
+        }
+        else if (x > tree.peek()) {
+            tree.poll();
+            tree.add(x);
+        }
+    }
     /*
     58. 最后一个单词的长度
      */
@@ -393,10 +526,43 @@ class Solution2023 {
         swap(arr, i + 1, high);
         return i + 1;
     }
-    private static void swap(int[] arr, int i, int j) {
+    private static void swap (int[] arr, int i, int j) {
         int temp = arr[i];
         arr[i] = arr[j];
         arr[j] = temp;
+    }
+    private static <T> void swap (T[] arr, int i, int j) {
+        T temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
+    }
+
+    public static void quickSortTwoArray(int[] arr, int[] arr2, int low, int high) {
+        if (low < high) {
+            int pi = partitionTwoArray(arr, arr2, low, high);
+            quickSortTwoArray(arr, arr2,  low, pi - 1);
+            quickSortTwoArray(arr, arr2,  pi + 1, high);
+        }
+    }
+    private static int partitionTwoArray(int[] arr, int[] arr2, int low, int high) {
+        int pivot = arr[high];
+        int i = low - 1;
+        for (int j = low; j < high; j++) {
+            if (arr[j] < pivot) {
+                i++;
+                swapTwoArray(arr, arr2, i, j);
+            }
+        }
+        swapTwoArray(arr, arr2, i + 1, high);
+        return i + 1;
+    }
+    private static void swapTwoArray (int[] arr, int[] arr2, int i, int j) {
+        int temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
+        temp = arr2[i];
+        arr2[i] = arr2[j];
+        arr2[j] = temp;
     }
 
 
@@ -407,7 +573,8 @@ class Solution2023 {
             Scanner in = new Scanner(System.in);
             Solution2023 solution = new Solution2023();
             int[] a = {9,-5,-5,5,-5,-4,-6,6,-6};
-            int[] b = {3,0,6,1,5};
+            int[] b = {3, 0, 6, 1, 5};
+            int[] d = {1, 2, 3, 4, 5};
             int[][] c = {
                     {0,0,1,0,0,0,0,1,0,0,0,0,0},
                     {0,0,0,0,0,0,0,1,1,1,0,0,0},
@@ -433,6 +600,14 @@ class Solution2023 {
 //            System.out.println(solution.countPairs(alist, target));
 //            System.out.println(solution.isPalindrome(in.nextInt()));
 //        }
-        System.out.println(solution.intToRoman(1958));
+//        System.out.println(solution.intToRoman(1958));
+        Solution2023.quickSortTwoArray(b, d, 0, b.length - 1);
+        for (int x : b) {
+            System.out.print(x + "\t");
+        }
+        System.out.println();
+        for (int x : d) {
+            System.out.print(x + "\t");
+        }
     }
 }
