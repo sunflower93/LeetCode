@@ -5,6 +5,71 @@ import java.util.*;
 
 class Solution2023 {
     /*
+    1331. 数组序号转换
+     */
+    public int[] arrayRankTransform(int[] arr) {
+        if (arr == null || arr.length < 1) return arr;
+        int[] temp = arr.clone();
+        quickSort(temp, 0, arr.length - 1);
+        HashMap<Integer, Integer> map = new HashMap<>();
+        int index = 1;
+        for (int i = 0; i < arr.length; i++) {
+            if (!map.containsKey(temp[i])) {
+                map.put(temp[i], index++);
+            }
+        }
+        for (int i = 0; i < arr.length; i++) {
+            arr[i] = map.get(arr[i]);
+        }
+        return arr;
+    }
+    public int[] arrayRankTransformSlow2(int[] arr) {
+        if (arr == null || arr.length < 1) return arr;
+        PriorityQueue<Integer> queue = new PriorityQueue<>(arr.length);
+        HashMap<Integer, Integer> map = new HashMap<>();
+        for (int i = 0; i < arr.length; i++)
+            if (!queue.contains(arr[i])) queue.add(arr[i]);
+        int index = 1;
+        while (!queue.isEmpty()) {
+            int temp = queue.poll();
+            map.put(temp, index++);
+        }
+        for (int i = 0; i < arr.length; i++) {
+            int temp = map.get(arr[i]);
+            arr[i] = temp;
+        }
+        return arr;
+    }
+    public int[] arrayRankTransformSlow(int[] arr) {
+        if (arr == null) return arr;
+        PriorityQueue<Integer> queue = new PriorityQueue<>(arr.length);
+        HashMap<Integer, HashSet<Integer>> map = new HashMap<>();
+        for (int i = 0; i < arr.length; i++) {
+            if (!queue.contains(arr[i])) queue.add(arr[i]);
+            if (map.containsKey(arr[i])) {
+                HashSet<Integer> set = map.get(arr[i]);
+                set.add(i);
+                map.remove(arr[i]);
+                map.put(arr[i], set);
+            }
+            else {
+                HashSet<Integer> set = new HashSet<>();
+                set.add(i);
+                map.put(arr[i], set);
+            }
+        }
+        int index = 1;
+        while (!queue.isEmpty()) {
+            int temp = queue.poll();
+            HashSet<Integer> tempSet = map.get(temp);
+            for (Integer x : tempSet) {
+                arr[x] = index;
+            }
+            index++;
+        }
+        return arr;
+    }
+    /*
     1736. 替换隐藏数字得到的最晚时间
      */
     public String maximumTime(String time) {
