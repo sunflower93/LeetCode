@@ -4,6 +4,41 @@ import javax.security.auth.login.CredentialNotFoundException;
 import java.util.*;
 
 class Solution2023 {
+    public int smallestDifference(int[] a, int[] b) {
+        Arrays.sort(a);
+        Arrays.sort(b);
+        int[] c = new int[a.length + b.length];
+        boolean[] cc = new boolean[c.length];
+        int i, j, index;
+        i = j = index = 0;
+        while (i < a.length && j < b.length) {
+            if (a[i] < b[j]) {
+                c[index] = a[i++];
+                cc[index++] = true;
+            }
+            else {
+                c[index] = b[j++];
+                cc[index++] = false;
+            }
+        }
+        while (i < a.length) {
+            c[index] = a[i++];
+            cc[index++] = true;
+        }
+        while (j < b.length) {
+            c[index] = b[j++];
+            cc[index++] = false;
+        }
+        System.out.println("c = " + Arrays.toString(c));
+        int ans = Integer.MAX_VALUE;
+        for (int k = 0; k < c.length - 1; k++) {
+            if (cc[k] != cc[k + 1]) {
+                int t = Math.abs(c[k + 1] - c[k]);
+                ans = t > 0 ? Math.min(ans, t) : ans;
+            }
+        }
+        return ans;
+    }
     /*
     1331. 数组序号转换
      */
