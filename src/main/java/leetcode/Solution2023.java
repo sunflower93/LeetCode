@@ -5,6 +5,39 @@ import java.util.*;
 
 class Solution2023 {
     /*
+    1200. 最小绝对差
+     */
+    public List<List<Integer>> minimumAbsDifference(int[] arr) {
+        Arrays.sort(arr);
+        List<List<Integer>> ans = new LinkedList<>();
+        int min = Integer.MAX_VALUE;
+        for (int i = 0; i < arr.length - 1; i++) {
+            int new_min = arr[i + 1] - arr[i];
+            if (new_min <= min) {
+                List<Integer> temp = new LinkedList<>();
+                if (new_min == min) ans.clear();
+                temp.add(arr[i]);
+                temp.add(arr[i + 1]);
+                ans.add(temp);
+                min = new_min;
+            }
+        }
+        return ans;
+    }
+    /*
+    1935. 可以输入的最大单词数
+     */
+    public int canBeTypedWords(String text, String brokenLetters) {
+        int ans = 0;
+        String[] strs = text.split(" ");
+        if (brokenLetters.length() < 1) return strs.length;
+        String bl = ".*[" + brokenLetters + "]+.*";
+        for (String str : strs) {
+            ans = str.matches(bl) ? ans : ans + 1;
+        }
+        return ans;
+    }
+    /*
     404. 左叶子之和
      */
     public int sumOfLeftLeaves(TreeNode root) {
@@ -862,8 +895,9 @@ class Solution2023 {
 //        for (int x : d) {
 //            System.out.print(x + "\t");
 //        }
-        while (true) {
-            System.out.println(Arrays.toString(solution.findClosedNumbers(in.nextInt())));
-        }
+//        while (true) {
+//            System.out.println(Arrays.toString(solution.findClosedNumbers(in.nextInt())));
+//        }
+        System.out.println(solution.canBeTypedWords("leet code", "e"));
     }
 }
