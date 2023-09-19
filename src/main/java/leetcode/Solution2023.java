@@ -5,6 +5,58 @@ import java.util.*;
 
 class Solution2023 {
     /*
+    404. 左叶子之和
+     */
+    public int sumOfLeftLeaves(TreeNode root) {
+        return root != null ? dfs(root) : 0;
+    }
+    public int dfs(TreeNode node) {
+        int ans = 0;
+        if (node.left != null) {
+            ans += isLeafNode(node.left) ? node.left.val : dfs(node.left);
+        }
+        if (node.right != null && !isLeafNode(node.right)) {
+            ans += dfs(node.right);
+        }
+        return ans;
+    }
+    public boolean isLeafNode(TreeNode node) {
+        return node.left == null && node.right == null;
+    }
+    /*
+    415. 字符串相加
+     */
+    public String addStrings(String num1, String num2) {
+        boolean flag = false;
+        int len1 = num1.length();
+        int len2 = num2.length();
+        if (len1 > len2) {
+            int t = len1;
+            len1 = len2;
+            len2 = t;
+            String tt = num1;
+            num1 = num2;
+            num2 = tt;
+        }
+        StringBuilder sb = new StringBuilder();
+        for (int i = 1; i <= len1; i++) {
+            int sum = num1.charAt(len1 - i) - '0' + num2.charAt(len2 - i) - '0';
+            sum = flag ? sum + 1 : sum;
+            flag = sum / 10 == 1 ? true : false;
+            sum = sum % 10;
+            sb.append(sum);
+        }
+        for (int i = len2 - len1 - 1; i >= 0; i--) {
+            int sum = num2.charAt(i) - '0';
+            sum = flag ? sum + 1 : sum;
+            flag = sum / 10 == 1 ? true : false;
+            sum = sum % 10;
+            sb.append(sum);
+        }
+        if (flag) sb.append("1");
+        return sb.reverse().toString();
+    }
+    /*
     1367. 二叉树中的链表
      */
     public boolean isSubPath(ListNode head, TreeNode root) {
