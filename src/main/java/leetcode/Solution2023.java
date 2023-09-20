@@ -5,6 +5,24 @@ import java.util.*;
 
 class Solution2023 {
     /*
+    2108. 找出数组中的第一个回文字符串
+     */
+    public String firstPalindrome(String[] words) {
+        for (String w : words) {
+            if (isPalindrome(w)) return w;
+        }
+        return "";
+    }
+    private boolean isPalindrome(String s) {
+        if (s == null) return false;
+        if (s.length() < 2) return true;
+        int i = 0;
+        for (i = 0; i < s.length() / 2; i++) {
+            if (s.charAt(i) != s.charAt(s.length() - i - 1)) break;
+        }
+        return i >= s.length() / 2;
+    }
+    /*
     1200. 最小绝对差
      */
     public List<List<Integer>> minimumAbsDifference(int[] arr) {
