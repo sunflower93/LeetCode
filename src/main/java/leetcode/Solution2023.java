@@ -5,6 +5,84 @@ import java.util.*;
 
 class Solution2023 {
     /*
+    2138. 将字符串拆分为若干长度为 k 的组
+     */
+    public String[] divideString(String s, int k, char fill) {
+        int len = s.length();
+        int arrayLen = (int)(Math.ceil(len * 1.0 / k));
+        String[] ans = new String[arrayLen];
+        for (int i = 0; i < arrayLen - 1; i++) {
+            ans[i] = s.substring(i * k, (i + 1) * k);
+        }
+        String t = s.substring((arrayLen - 1) * k);
+        if (arrayLen * k > len) {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < arrayLen * k - len; i++) {
+                sb.append(fill);
+            }
+            ans[arrayLen - 1] = t + sb;
+        }
+        else ans[arrayLen - 1] = t;
+        return ans;
+    }
+    /*
+    2133. 检查是否每一行每一列都包含全部整数
+     */
+    public boolean checkValid(int[][] matrix) {
+        int len = matrix.length;
+        if (len == 1) return matrix[0][0] == 1;
+        for (int i = 0; i < len; i++) {
+            byte[] temp = new byte[len];
+            for (int j = 0; j < len; j++) {
+                if (matrix[i][j] > len || temp[matrix[i][j] - 1] > 0) return false;
+                else temp[matrix[i][j] - 1] = 1;
+            }
+        }
+        for (int i = 0; i < len; i++) {
+            byte[] temp = new byte[len];
+            for (int j = 0; j < len; j++) {
+                if (matrix[j][i] > len || temp[matrix[j][i] - 1] > 0) return false;
+                else temp[matrix[j][i] - 1] = 1;
+            }
+        }
+        return true;
+    }
+    /*
+    2114. 句子中的最多单词数
+     */
+    public int mostWordsFound(String[] sentences) {
+        int ans = 1;
+        for (String sentence : sentences) {
+            int len = sentence.split(" ").length;
+            ans = ans < len ? len : ans;
+        }
+        return ans;
+    }
+    /*
+    2119. 反转两次的数字
+     */
+    public boolean isSameAfterReversals(int num) {
+        if (num == 0) return true;
+        return num % 10 != 0;
+    }
+    /*
+    2124. 检查是否所有 A 都在 B 之前
+     */
+    public boolean checkString(String s) {
+        return s.lastIndexOf('a') < s.indexOf('b') || s.indexOf('b') < 0;
+    }
+    /*
+    2129. 将标题首字母大写
+     */
+    public String capitalizeTitle(String title) {
+        StringBuilder sb = new StringBuilder();
+        for (String t : title.split(" ")) {
+            if (t.length() <= 2) sb.append(t.toLowerCase() + " ");
+            else sb.append(String.valueOf(t.charAt(0)).toUpperCase() + t.substring(1) + " ");
+        }
+        return sb.toString().trim();
+    }
+    /*
     2108. 找出数组中的第一个回文字符串
      */
     public String firstPalindrome(String[] words) {
