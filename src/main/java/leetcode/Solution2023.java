@@ -5,6 +5,38 @@ import java.util.*;
 
 class Solution2023 {
     /*
+    2562. 找出数组的串联值
+     */
+    public long findTheArrayConcVal(int[] nums) {
+        int i = 0;
+        int j = nums.length - 1;
+        long ans = 0;
+        while (i <= j) {
+            if (i == j) ans += nums[i];
+            else {
+                int len = String.valueOf(nums[j]).length();
+                ans += nums[i] * Math.pow(10, len) + nums[j];
+            }
+            i++;
+            j--;
+        }
+        return ans;
+    }
+    /*
+    2544. 交替数字和
+     */
+    public int alternateDigitSum(int n) {
+        boolean flag = true;
+        int sum = 0;
+        while (n != 0) {
+            if (flag) sum += n % 10;
+            else sum = sum - n % 10;
+            flag = !flag;
+            n = n / 10;
+        }
+        return flag ? 0 - sum : sum;
+    }
+    /*
     2138. 将字符串拆分为若干长度为 k 的组
      */
     public String[] divideString(String s, int k, char fill) {
